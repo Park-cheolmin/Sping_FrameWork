@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 
 import com.min.matzip.Const;
 import com.min.matzip.SecurityUtils;
-import com.min.matzip.model.UserDMI;
-import com.min.matzip.user.model.UserDTO;
+import com.min.matzip.user.model.UserDMI;
+import com.min.matzip.user.model.UserPARAM;
 import com.min.matzip.user.model.UserVO;
 
 @Service
@@ -16,14 +16,20 @@ public class UserService {
 	private UserMapper mapper;
 	
 	//1번 로그인 성공, 2번 아이디없음, 3번 비번 틀림
-	public int login(UserDTO param) {
-		if(param.getUser_id().equals("")) {
-			return Const.NO_ID;
-		}
+	public int login(UserPARAM param) {
+		if(param.getUser_id().equals("")) { return Const.NO_ID;	}
 		
-		UserDMI dbUser = mapper.selUser(param);
-		System.out.println("pw : " + dbUser.getUser_pw());
-		return 2;
+		UserDMI dbUser = mapper.selUser(param);  
+		if(dbUser == null) {	 return Const.NO_ID; }
+		
+		String cryptPw = SecurityUtils.getEncrypt(param.getUser_pw(), dbUser.getSalt());
+		if(!cryptPw.equals(dbUser.getUser_pw())) { return Const.NO_PW; }
+		
+		param.setUser_pw(null);
+		param.setNm(dbUser.getNm());
+		param.setProfile_img(dbUser.getProfile_img());
+		return Const.SUCCESS;
+		
 	}
 	
 	public int join(UserVO param) {

@@ -1,6 +1,6 @@
-package com.min.matzip.model;
+package com.min.matzip.rest.model;
 
-public class RestaurantVO {
+public class RestVO {
 	private int i_rest;
 	private String nm;
 	private String addr;

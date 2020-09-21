@@ -20,15 +20,13 @@
 	<script>
 		function chkId() {
 			const user_id = frm.user_id.value           //좋아요선택시 새창(refresh)를 하지않기위해 ajax통신 사용
-			axios.get('/user/ajaxIdChk', {
-				params: {
-					'user_id' : user_id //변수명과 키값이같을때는 user_id만 써도됨
-				} 
+			axios.post('/user/ajaxIdChk', {
+					user_id : user_id 
 			}).then(function(res) {
 				console.log(res)
-				if(res.data.result == 2) { //아이디 없음
+				if(res.data == '2') { //아이디 없음
 					idChkResult.innerText = '사용할 수 있는 아이디입니다.'
-				} else if(res.data.result == 3) { //아이디 중복됨
+				} else if(res.data == '3') { //아이디 중복됨
 					idChkResult.innerText = '이미 사용중입니다.'
 				}
 			})
