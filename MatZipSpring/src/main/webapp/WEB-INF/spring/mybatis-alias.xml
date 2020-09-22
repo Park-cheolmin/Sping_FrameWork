@@ -9,5 +9,7 @@
 			<typeAlias type="com.min.matzip.rest.model.RestVO" alias="RestVO"></typeAlias>
 			<typeAlias type="com.min.matzip.rest.model.RestDMI" alias="RestDMI"></typeAlias>
 			<typeAlias type="com.min.matzip.rest.model.RestPARAM" alias="RestPARAM"></typeAlias>
+			
+			<typeAlias type="com.min.matzip.model.CodeVO" alias="CodeVO"></typeAlias>
 	</typeAliases>
 </configuration>

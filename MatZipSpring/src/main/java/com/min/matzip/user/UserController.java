@@ -24,6 +24,12 @@ public class UserController {
 	@Autowired  //빈등록(스프링이 객체화시킨 것) 중에 자동으로 가져온다
 	private UserService service;
 	
+	@RequestMapping(value="/logout", method = RequestMethod.GET) 
+	public String logout(HttpSession hs) {
+		hs.invalidate();
+		return "redirect:/";
+	}
+	
 	@RequestMapping(value="/login", method = RequestMethod.GET) //GET 화면열기
 	public String login(Model model) {
 		model.addAttribute(Const.TITLE, "로그인");

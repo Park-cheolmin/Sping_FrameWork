@@ -51,6 +51,13 @@
 	
 	<mybatis-spring:scan base-package="com.min.matzip"></mybatis-spring:scan> <!--  @Mapper를 찾는 역할 -->
 	
+	<interceptors>
+		<interceptor>
+			<mapping path="/**"></mapping>
+			<beans:bean class="com.min.matzip.LoginCheckInterceptor"></beans:bean>
+		</interceptor>
+	</interceptors>
+	
 	
 	
 </beans:beans>

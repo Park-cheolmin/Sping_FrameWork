@@ -58,8 +58,8 @@
 							<h1 class="restaurant_name">${data.nm}</h1>
 					</div>
 					<div class="status branch_none">
-						<span class="cnt hit">${data.cntHits}</span>
-						<span class="cnt favorite">${data.cntFavorite}</span>
+						<span class="cnt hit">${data.hits}</span>
+						<span class="cnt favorite">${data.cnt_favorite}</span>
 					</div>
 				</div>
 			</div>
@@ -75,6 +75,10 @@
 						<tr>
 							<th>카테고리</th>
 							<td>${data.cd_category_nm}</td>
+						</tr>
+						<tr>
+							<th>작성자</th>
+							<td>${data.user_nm}</td>
 						</tr>
 						<tr>
 							<th>메뉴</th>
@@ -113,7 +117,7 @@
 		console.log('i_rest : ' + i_rest)
 		console.log('seq : ' + seq)
 		
-		axios.get('/restaurant/ajaxDelRecMenu', {
+		axios.get('/rest/ajaxDelRecMenu', {
 			params: {
 				i_rest, seq //여기서 적는 EL식은 고정값 (EL식은 서버에서 쓰는것, 자바스크립트에서는 못씀)
 				 
@@ -155,7 +159,7 @@
 	
 	function isDel() {
 		if(confirm('삭제 하시겠습니까?')) {
-			location.href = '/restaurant/restDel?i_rest=${data.i_rest}'
+			location.href = '/rest/restDel?i_rest=${data.i_rest}'
 		}
 	}
 </script>

@@ -10,5 +10,7 @@ import com.min.matzip.rest.model.RestPARAM;
 @Mapper
 public interface RestMapper {
 	public List<RestDMI> selRestList(RestPARAM param);
-	public List<RestDMI> insRest(RestPARAM param);
+	int insRest(RestPARAM param);
+	RestDMI selRest(RestPARAM param);
+	
 }
