@@ -28,7 +28,7 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 		boolean isLogout = SecurityUtils.isLogout(request);
 		
 		switch(uriArr[1]) {
-		case ViewRef.URI_USER :
+		case ViewRef.URI_USER : //user
 				switch(uriArr[2]) {
 				case "login" : case "join" :
 					if(!isLogout) { //로그인 되어있는 상태
@@ -37,9 +37,9 @@ public class LoginCheckInterceptor extends HandlerInterceptorAdapter{
 					}
 				}
 			
-		case ViewRef.URI_REST :
+		case ViewRef.URI_REST : //rest
 			switch(uriArr[2]) {
-			case "restReg" :
+			case "reg" :
 				if(isLogout) {
 					response.sendRedirect("/user/login");
 					return false;
