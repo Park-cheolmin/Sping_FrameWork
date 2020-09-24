@@ -7,9 +7,11 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -17,6 +19,7 @@ import com.min.matzip.Const;
 import com.min.matzip.SecurityUtils;
 import com.min.matzip.ViewRef;
 import com.min.matzip.rest.model.RestDMI;
+import com.min.matzip.rest.model.RestFile;
 import com.min.matzip.rest.model.RestPARAM;
 import com.min.matzip.rest.model.RestRecMenuVO;
 
@@ -67,10 +70,13 @@ public class RestController {
 	public String detail(RestPARAM param, Model model) {
 		RestDMI data = service.selRest(param);
 		
+		
+		model.addAttribute("menuList", service.selRestMenus(param));
 		model.addAttribute("recMenuList", service.selRestRecMenus(param));
+		model.addAttribute("data", data);
 		
 		model.addAttribute("css", new String[] {"restDetail"});
-		model.addAttribute("data", data);
+		
 		model.addAttribute(Const.TITLE, data.getNm()); //가게명
 		model.addAttribute(Const.VIEW, "rest/restDetail"); //파일명 쓰는곳
 		
@@ -108,5 +114,13 @@ public class RestController {
 		String realPath = hs.getServletContext().getRealPath(path);
 		param.setI_user(SecurityUtils.getLoginUserPk(hs)); //loginuser pk담기
 		return service.delRecMenu(param, realPath);
+	}
+	
+	@RequestMapping("/menus")
+	public String menus(@ModelAttribute RestFile param, HttpSession hs, RedirectAttributes ra) {//@ModelAttribute(객체로 받을떄 이걸 사용해야하지만 자동으로 해준다)
+		int i_user = SecurityUtils.getLoginUserPk(hs);
+		int result = service.insMenus(param, i_user);
+		ra.addAttribute("i_rest", param.getI_rest());
+		return "redirect:/rest/detail";
 	}
 }

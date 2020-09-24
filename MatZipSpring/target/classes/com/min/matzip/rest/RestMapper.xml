@@ -16,6 +16,19 @@
 		FROM  t_restaurant_recommend_menu	
 		WHERE i_rest = #{i_rest}
 	</insert>
+	
+	<insert id="insRestMenu" parameterType="RestRecMenuVO">
+		INSERT INTO t_restaurant_menu
+		(i_rest, seq, menu_pic)
+		SELECT #{i_rest}, ifnull(max(seq), 0) + 1, #{menu_pic}
+		FROM t_restaurant_menu
+		WHERE i_rest = #{i_rest}
+	</insert>
+
+	<select id="selRestChkUser" parameterType="Integer" resultType="Integer">
+		SELECT i_user FROM t_restaurant
+		WHERE i_rest = #{i_rest}
+	</select>
 
 	<select id="selRestList" parameterType="RestPARAM" resultType="RestDMI">
 			SELECT i_rest, nm, lat, lng
@@ -46,21 +59,34 @@
 		WHERE A.i_rest = #{i_rest}
 	</select>
 	
-	<select id="selRestRecMenus" parameterType="RestRecMenuVO" resultType="RestRecMenuVO">
-		SELECT  A.seq, A.menu_nm, A.menu_price, A.menu_pic
+	<select id="selRestRecMenus" parameterType="RestPARAM" resultType="RestRecMenuVO">
+		SELECT A.seq, A.menu_nm, A.menu_price, A.menu_pic
 		FROM t_restaurant_recommend_menu A
-		<if test="i_user > 0"> 	<!-- 작성자체크 -->
+		<if test="i_user > 0">
 			INNER JOIN t_restaurant B
 			ON A.i_rest = B.i_rest
 			AND B.i_user = #{i_user}
 		</if>
 		WHERE A.i_rest = #{i_rest}
-		<if test="seq > 0">		<!-- 지울 메뉴 -->
+		<if test="seq > 0">
 			AND A.seq = #{seq}
 		</if>
-		
+
 	</select>
 	
+	<select id="selRestMenus" parameterType="RestPARAM" resultType="RestRecMenuVO">
+		SELECT A.seq, A.menu_pic
+		FROM t_restaurant_menu A
+		<if test="i_user > 0">
+			INNER JOIN t_restaurant B
+			ON A.i_rest = B.i_rest
+			AND B.i_user = #{i_user}
+		</if>
+		WHERE A.i_rest = #{i_rest}
+		<if test="seq > 0">
+			AND A.seq = #{seq}
+		</if>
+	</select>
 		
 	<delete id="delRestRecMenu" parameterType="RestPARAM"> <!-- 트랜잭션을 건다 : 여러개의 작업을 하나의 작업으로 묶어서 처리 (사용이유: 쿼리문이 단순해짐) -->
 		DELETE A FROM t_restaurant_recommend_menu A

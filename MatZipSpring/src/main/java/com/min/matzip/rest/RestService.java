@@ -12,11 +12,13 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import com.min.matzip.CommonUtils;
+import com.min.matzip.Const;
 import com.min.matzip.FileUtils;
 import com.min.matzip.SecurityUtils;
 import com.min.matzip.model.CodeVO;
 import com.min.matzip.model.CommonMapper;
 import com.min.matzip.rest.model.RestDMI;
+import com.min.matzip.rest.model.RestFile;
 import com.min.matzip.rest.model.RestPARAM;
 import com.min.matzip.rest.model.RestRecMenuVO;
 
@@ -67,6 +69,11 @@ public class RestService {
 	public int insRecMenus(MultipartHttpServletRequest mReq) {
 		
 		int i_rest = Integer.parseInt(mReq.getParameter("i_rest")); 
+		int i_user = SecurityUtils.getLoginUserPk(mReq.getSession());
+		if(_authFail(i_rest, i_user)) {
+			return Const.FAIL;
+		}  //내가 쓴글이 아닌글은 못쓰게 막는것
+		
 		List<MultipartFile> fileList = mReq.getFiles("menu_pic");
 		String[] menuNmArr = mReq.getParameterValues("menu_nm");
 		String[] menuPriceArr = mReq.getParameterValues("menu_price");
@@ -87,18 +94,9 @@ public class RestService {
 			
 			//파일 각 저장
 			MultipartFile mf = fileList.get(i);
-			
-			if(mf.isEmpty()) { continue;} //파일 없으면 스킵!
-			
-			String originFileNm = mf.getOriginalFilename();
-			String ext = FileUtils.getExt(originFileNm);
-			String saveFileNm = UUID.randomUUID() + ext;
-			try {
-				mf.transferTo(new File(path + saveFileNm));
-				vo.setMenu_pic(saveFileNm);
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			String saveFileNm = FileUtils.saveFile(path, mf);
+			vo.setMenu_nm(saveFileNm);  //null이박히면 file이 없는거
+		
 		}
 		
 		for(RestRecMenuVO vo : list) {
@@ -106,6 +104,10 @@ public class RestService {
 		}
 		
 		return i_rest;
+	}
+	
+	public  List<RestRecMenuVO> selRestMenus(RestPARAM param) {
+		return mapper.selRestMenus(param);
 	}
 	
 	public List<RestRecMenuVO> selRestRecMenus(RestPARAM param) {
@@ -132,6 +134,42 @@ public class RestService {
 		}		
 
 		return mapper.delRestRecMenu(param);
+	}
+	
+	public int insMenus(RestFile param, int i_user) {		
+		if(_authFail(param.getI_rest(), i_user)) {
+			return Const.FAIL;
+		}
+		System.out.println(Const.realPath);
+
+		String path = Const.realPath + "/resources/img/rest/" + param.getI_rest() + "/menu/";
+
+		List<RestRecMenuVO> list = new ArrayList();
+
+		for(MultipartFile mf : param.getMenu_pic()) {
+			RestRecMenuVO vo = new RestRecMenuVO();
+			list.add(vo);			
+
+			String saveFileNm = FileUtils.saveFile(path, mf);
+			vo.setMenu_pic(saveFileNm);
+			vo.setI_rest(param.getI_rest());
+		}
+
+		for(RestRecMenuVO vo : list) {
+			mapper.insRestMenu(vo);
+		}
+
+		return Const.SUCCESS;
+	}
+	
+	private boolean _authFail(int i_rest, int i_user) {	//모든글 모든 가게에는 누가쓴 글인지 db에 저장되어 있다, i_user는 로그인한 i_user 
+		RestPARAM param = new RestPARAM();
+		param.setI_rest(i_rest);
+		int dbI_user = mapper.selRestChkUser(i_rest); //0줄 아니면 1줄이 넘어온다 
+		if(i_user != dbI_user) {
+			return true; // 실패한거
+		}
+		return false; // _authFaildl false는 인증 완료됨
 	}
 	
 }

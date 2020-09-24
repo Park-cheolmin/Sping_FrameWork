@@ -18,7 +18,7 @@
 					<div class="price"><fmt:formatNumber type="number" value="${item.menu_price}"></fmt:formatNumber></div>
 				</div>
 				<c:if test="${loginUser.i_user == data.i_user}">
-					<div class="delIconContainer" onclick="delRecMenu(${data.i_rest}, ${item.seq})">
+					<div class="delIconContainer" onclick="delRecMenu(${item.seq})">
 						<span class="material-icons">clear</span>
 					</div>
 				</c:if>
@@ -44,7 +44,7 @@
 				
 				<h2>- 메뉴 -</h2>
 				<div>
-					<form id="menuFrm" action="/restaurant/addMenusProc" enctype="multipart/form-data" method="post">
+					<form id="menuFrm" action="/rest/menus" enctype="multipart/form-data" method="post">
 						<input type="hidden" name="i_rest" value="${data.i_rest}">
 						<input type="file" name="menu_pic" multiple>
 						<div><input type="submit" value="등록"></div>
@@ -87,7 +87,12 @@
 									<c:if test="${fn:length(menuList) > 0}">
 										<c:forEach var="i" begin="0" end="${fn:length(menuList) > 3 ? 2 : fn:length(menuList) - 1}">
 											<div class="menuItem">
-												<img src="/res/img/restaurant/${data.i_rest}/menu/${menuList[i].menu_pic}">
+												<img src="/res/img/rest/${data.i_rest}/menu/${menuList[i].menu_pic}">
+												<c:if test="${loginUser.i_user  == data.i_user}">
+													<div class="delIconContainer" onclick="delMenu(${menuList[i].seq})">
+														<span class="material-icons">clear</span>
+													</div>
+												</c:if>
 											</div>
 										</c:forEach>
 									</c:if>
@@ -118,7 +123,7 @@
 		axios.get('/rest/ajaxDelRecMenu', {
 			params: {
 				i_rest: ${data.i_rest},
-				seq: seq,  //여기서 적는 EL식은 고정값 (EL식은 서버에서 쓰는것, 자바스크립트에서는 못씀)
+				seq  //여기서 적는 EL식은 고정값 (EL식은 서버에서 쓰는것, 자바스크립트에서는 못씀)
 				
 			}
 		}).then(function(res){
@@ -141,9 +146,16 @@
 		var inputPrice = document.createElement('input')
 		inputPrice.setAttribute('type', 'number')
 		inputPrice.setAttribute('name', 'menu_price')
+		inputPrice.value = '0'
 		var inputPic = document.createElement('input')
 		inputPic.setAttribute('type', 'file')
 		inputPic.setAttribute('name', 'menu_pic')
+		var delBtn = document.createElement('input')
+		delBtn.setAttribute('type', 'button')
+		delBtn.setAttribute('value', 'X')		
+		delBtn.addEventListener('click', function() {
+			div.remove()
+		})	
 		
 		div.append('메뉴: ')
 		div.append(inputNm)
@@ -151,6 +163,7 @@
 		div.append(inputPrice)
 		div.append('  사진: ')
 		div.append(inputPic)
+		div.append(delBtn)
 		
 		recItem.append(div)
 	}
