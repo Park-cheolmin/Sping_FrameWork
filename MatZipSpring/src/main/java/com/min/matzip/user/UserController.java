@@ -43,7 +43,7 @@ public class UserController {
 		
 		if(result == Const.SUCCESS) {
 			hs.setAttribute(Const.LOGIN_USER, param); //로그인 됬을때 세션에다가 박음
-			return "redirect:/rest/map";
+			return "redirect:/";
 		}
 		
 		String msg = null;

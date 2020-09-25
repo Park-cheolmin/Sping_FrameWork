@@ -6,7 +6,14 @@ public class RestPARAM extends RestVO{  //파라미터로 쓴다
 	private double ne_lat;
 	private double ne_lng;
 	private int seq;
+	private String menu_pic;
 	
+	public String getMenu_pic() {
+		return menu_pic;
+	}
+	public void setMenu_pic(String mene_pic) {
+		this.menu_pic = mene_pic;
+	}
 	public int getSeq() {
 		return seq;
 	}

@@ -3,7 +3,8 @@
 * {
 	box-sizing: border-box;
 }
-html, body{
+
+html, body {
 	padding: 0;
 	margin: 0;
 	width: 100%;
@@ -30,11 +31,11 @@ a {
 	height: 100%;
 }
 
-#container > header {
+#container > header {	
 	background-color: #a29bfe;
 	display: flex;
-	padding: 10px;
 	height: 70px;
+	padding: 10px;
 }
 
 #container > header > #headerLeft {
@@ -43,40 +44,36 @@ a {
 	align-items: center;
 }
 
-#container > header > #headerLeft > #headerLogout > a{
+#container > header > #headerLeft > #headerLogout > a {
 	color: blue;
-}	
+}
+
 #container > header > #headerRight {
 	padding-right: 50px;
-	align-items: center;
 	display: flex;
 	justify-content: flex-end;
+	align-items: center;
 	flex-grow: 1;
 }
 
 #container > header > #headerRight > a {
-		font-weight: bold;
-		font-size: 1.2em;
+	font-weight: bold;
+	font-size: 1.4em;
 }
 
 #container > section {
 	flex-grow: 1;
-	
-	/*
-	display: flex;
-	justify-content: flex-start;
-	align-items: flex-start; // --> justify~와 align~ 기본값 : flex-start
-	 */
+	overflow: auto;
 }
 
-#container > footer {
+#container  footer {
+	height: 50px;
+	padding: 10px;
+	display:flex;
+	justify-content: center;
 	align-items: center;
 	background-color: #636e72;
-	color: white;
-	display: flex;
-	height: 50px;
-	justify-content: center;
-	padding: 10px;
+	color: #fff;
 }
 
 #sectionContainerCenter {
@@ -92,18 +89,18 @@ a {
 	border: 1px solid #bdc3c7;
 }
 
-.msg { color: red;}
+.msg { color: red; }
 
  .containerPImg {
-   	display: inline-block;
-   	width: 30px;
-   	height: 30px;
-   	border-radius: 50%;
-   	overflow: hidden;
+	display: inline-block;
+	width: 30px;
+	height: 30px;
+    border-radius: 50%;
+    overflow: hidden;
 }
 
 .pImg {
-	object-fit:cover;
-	height:100%;
-	width:100%;
+	object-fit: cover;
+	height: 100%;
+	width: 100%;
 }

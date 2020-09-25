@@ -71,16 +71,22 @@ public class RestController {
 		RestDMI data = service.selRest(param);
 		
 		
-		model.addAttribute("menuList", service.selRestMenus(param));
+		//model.addAttribute("menuList", service.selRestMenus(param));
 		model.addAttribute("recMenuList", service.selRestRecMenus(param));
 		model.addAttribute("data", data);
 		
-		model.addAttribute("css", new String[] {"restDetail"});
+		model.addAttribute("css", new String[] {"restDetail", "swiper-bundle.min"});
 		
 		model.addAttribute(Const.TITLE, data.getNm()); //가게명
 		model.addAttribute(Const.VIEW, "rest/restDetail"); //파일명 쓰는곳
 		
 		return ViewRef.TEMP_MENU_TEMP;
+	}
+	
+	@RequestMapping("/ajaxSelMenuList")
+	@ResponseBody
+	public List<RestRecMenuVO> ajaxSelMenuList(RestPARAM param) {
+		return service.selRestMenus(param);
 	}
 	
 	@RequestMapping("/del")
@@ -113,7 +119,12 @@ public class RestController {
 		String path = "/resources/img/rest/" + param.getI_rest() + "/rec_menu/";
 		String realPath = hs.getServletContext().getRealPath(path);
 		param.setI_user(SecurityUtils.getLoginUserPk(hs)); //loginuser pk담기
-		return service.delRecMenu(param, realPath);
+		return service.delRestRecMenu(param, realPath);
+	}
+	
+	@RequestMapping("/ajaxDelMenu")
+	@ResponseBody public int ajaxDelMenu(RestPARAM param) {
+		return service.delRestMenu(param); //restintercepter, const.realpath 때문에 간단하게 가능, i_rest, seq, menu_pic을 보낸다
 	}
 	
 	@RequestMapping("/menus")

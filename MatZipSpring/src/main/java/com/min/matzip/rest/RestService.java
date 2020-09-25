@@ -58,13 +58,40 @@ public class RestService {
 		mapper.delRest(param);
 	}	
 
-	public int delRestRecMenu(RestPARAM param) {
+	public int delRestRecMenu(RestPARAM param, String realPath) {
+		//파일 삭제
+		List<RestRecMenuVO> list = mapper.selRestRecMenus(param);
+		if(list.size() == 1) {
+			RestRecMenuVO item = list.get(0);
+
+			if(item.getMenu_pic() != null && !"".equals(item.getMenu_pic())) { //이미지 있음 > 삭제!!
+				File file = new File(realPath + item.getMenu_pic());
+				if(file.exists()) {
+					if(file.delete()) {
+						return mapper.delRestRecMenu(param);
+					} else {
+						return 0;
+					}
+				}
+			}
+		}
+
 		return mapper.delRestRecMenu(param);
 	}
-
+	
 	public int delRestMenu(RestPARAM param) {
+		if(param.getMenu_pic() != null && !"".equals(param.getMenu_pic())) {
+			String path = Const.realPath + "/resources/img/rest/" + param.getI_rest() + "/menu/";
+
+			if(FileUtils.delFile(path + param.getMenu_pic())) {
+				return mapper.delRestMenu(param);		
+			} else {
+				return Const.FAIL;
+			}
+		}
 		return mapper.delRestMenu(param);
 	}
+	
 	
 	public int insRecMenus(MultipartHttpServletRequest mReq) {
 		
@@ -95,7 +122,7 @@ public class RestService {
 			//파일 각 저장
 			MultipartFile mf = fileList.get(i);
 			String saveFileNm = FileUtils.saveFile(path, mf);
-			vo.setMenu_nm(saveFileNm);  //null이박히면 file이 없는거
+			vo.setMenu_pic(saveFileNm);  //null이박히면 file이 없는거
 		
 		}
 		
@@ -115,26 +142,6 @@ public class RestService {
 		return mapper.selRestRecMenus(param);
 	}
 	
-	public int delRecMenu(RestPARAM param, String realPath) {
-		//파일 삭제
-		List<RestRecMenuVO> list = mapper.selRestRecMenus(param);
-		if(list.size() == 1) {
-			RestRecMenuVO item = list.get(0);
-
-			if(item.getMenu_pic() != null && !item.getMenu_pic().equals("")) { //이미지 있음 > 삭제!!
-				File file = new File(realPath + item.getMenu_pic());
-				if(file.exists()) {
-					if(file.delete()) {
-						return mapper.delRestRecMenu(param);
-					} else {
-						return 0;
-					}
-				}
-			}
-		}		
-
-		return mapper.delRestRecMenu(param);
-	}
 	
 	public int insMenus(RestFile param, int i_user) {		
 		if(_authFail(param.getI_rest(), i_user)) {
