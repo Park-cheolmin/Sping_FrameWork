@@ -5,6 +5,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,6 +47,22 @@ public class RestService {
 
 	public int insRest(RestPARAM param) {
 		return mapper.insRest(param);
+	}
+	
+	public void addHits(RestPARAM param, HttpServletRequest req) {
+		String myIp = req.getRemoteAddr();
+		ServletContext ctx = req.getServletContext();
+
+		int i_user = SecurityUtils.getLoginUserPk(req);
+
+		String currentRestReadIp = (String)ctx.getAttribute(Const.CURRENT_REST_READ_IP + param.getI_rest());
+		if(currentRestReadIp == null || !currentRestReadIp.equals(myIp)) {
+
+			param.setI_user(i_user); //내가 쓴 글이면 조회수 안 올라가게 쿼리문으로 막는다
+			//조회수 올림 처리 할꺼임
+			mapper.updAddHits(param);
+			ctx.setAttribute(Const.CURRENT_REST_READ_IP + param.getI_rest(), myIp);
+		}
 	}
 	
 	public RestDMI selRest(RestPARAM param) {

@@ -43,4 +43,36 @@ public class UserService {
 		
 		return mapper.insUser(param);
 	}
+	
+	public int ajaxToggleFavorite(UserPARAM param) { //PARAM에 i_user, i_rest, proc_type이 들어있음
+		switch(param.getProc_type()) {
+		case "ins" : 
+			return mapper.insFavorite(param);
+		case "del" :
+			return mapper.delFavorite(param);
+		}
+		return 0;
+	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

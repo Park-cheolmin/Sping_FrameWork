@@ -63,17 +63,16 @@ a {
 
 #container > section {
 	flex-grow: 1;
-	overflow: auto;
 }
 
-#container  footer {
-	height: 50px;
-	padding: 10px;
-	display:flex;
-	justify-content: center;
+#container > footer {
 	align-items: center;
 	background-color: #636e72;
-	color: #fff;
+	color: white;
+	display:flex;
+	height: 50px;
+	justify-content: center;
+	padding: 10px;
 }
 
 #sectionContainerCenter {
@@ -92,7 +91,7 @@ a {
 .msg { color: red; }
 
  .containerPImg {
-	display: inline-block;
+	display: inline-block;	
 	width: 30px;
 	height: 30px;
     border-radius: 50%;

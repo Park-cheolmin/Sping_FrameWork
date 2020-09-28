@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.min.matzip.Const;
+import com.min.matzip.SecurityUtils;
 import com.min.matzip.ViewRef;
 import com.min.matzip.user.model.UserPARAM;
 import com.min.matzip.user.model.UserVO;
@@ -90,5 +91,14 @@ public class UserController {
 		int result = service.login(param);
 		
 		return String.valueOf(result);
+	}
+	
+	@RequestMapping(value="/ajaxToggleFavorite", method=RequestMethod.GET)
+	@ResponseBody
+	public int ajaxToggleFavorite(UserPARAM param, HttpSession hs) {
+		System.out.println("==> ajaxToggleFavorite");
+		int i_user = SecurityUtils.getLoginUserPk(hs);
+		param.setI_user(i_user);
+		return service.ajaxToggleFavorite(param);
 	}
 }

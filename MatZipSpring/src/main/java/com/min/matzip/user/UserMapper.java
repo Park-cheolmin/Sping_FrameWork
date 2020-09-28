@@ -10,5 +10,9 @@ import com.min.matzip.user.model.UserVO;
 @Mapper
 public interface UserMapper {
 	public int insUser(UserVO p); //insUser와 (UserMapper.xml에)있는 id와 같으면됨
+	public int insFavorite(UserPARAM param);
+	
 	public UserDMI selUser(UserPARAM p);
+	
+	public int delFavorite(UserPARAM param);
 }
