@@ -8,9 +8,9 @@
 <title>${title}</title>
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@500&display=swap" rel="stylesheet">
-<link rel="stylesheet" type="text/css" href="/res/css/common.css?dkdddddkdkdk=11222">
+<link rel="stylesheet" type="text/css" href="/res/css/common.css?dddkdk=11222">
 <c:forEach items="${css}" var="item">
-	<link rel="stylesheet" type="text/css" href="/res/css/${item}.css">
+	<link rel="stylesheet" type="text/css" href="/res/css/${item}.css?dddkdkk=11222">
 </c:forEach>
 </head>
 <body>

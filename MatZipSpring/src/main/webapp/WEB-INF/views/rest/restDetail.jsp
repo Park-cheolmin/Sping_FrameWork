@@ -49,7 +49,7 @@
 				</div>
 			</c:if>
 			
-<div class="restaurant-detail">
+			<div class="restaurant-detail">
 				<div id="detail-header">
 					<div class="restaurant_title_wrap">
 						<h1 class="restaurant_name">${data.nm}</h1>
@@ -121,7 +121,6 @@
 <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
 <script>
-
 	function toggleFavorite() {
 		console.log('favorite : ' + favorite.innerText.trim())
 		console.log('favorite : ' + (favorite.innerText.trim() == 'favorite'))
@@ -150,7 +149,6 @@
 		})
 		
 	}
-
 	function delMenu() {
 		if(!confirm('삭제하시겠습니까?')) { return }		
 		const obj = menuList[mySwiper.realIndex]

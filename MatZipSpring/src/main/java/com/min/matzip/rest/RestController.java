@@ -85,7 +85,7 @@ public class RestController {
 		model.addAttribute("recMenuList", service.selRestRecMenus(param));
 		model.addAttribute("data", data);
 		
-		model.addAttribute("Const.CSS", new String[] {"restDetail", "swiper-bundle.min"});
+		model.addAttribute(Const.CSS, new String[]{"restDetail", "swiper-bundle.min"});
 		
 		model.addAttribute(Const.TITLE, data.getNm()); //가게명
 		model.addAttribute(Const.VIEW, "rest/restDetail"); //파일명 쓰는곳

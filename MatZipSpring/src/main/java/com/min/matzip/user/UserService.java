@@ -1,10 +1,15 @@
 package com.min.matzip.user;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.min.matzip.Const;
 import com.min.matzip.SecurityUtils;
+import com.min.matzip.rest.RestMapper;
+import com.min.matzip.rest.model.RestPARAM;
+import com.min.matzip.rest.model.RestRecMenuVO;
 import com.min.matzip.user.model.UserDMI;
 import com.min.matzip.user.model.UserPARAM;
 import com.min.matzip.user.model.UserVO;
@@ -14,6 +19,9 @@ public class UserService {
 	
 	@Autowired //만들어진 DAO를 Autowired를 써서 주소값을 불러온다
 	private UserMapper mapper;
+	
+	@Autowired
+	private RestMapper restMapper;
 	
 	//1번 로그인 성공, 2번 아이디없음, 3번 비번 틀림
 	public int login(UserPARAM param) {
@@ -52,6 +60,20 @@ public class UserService {
 			return mapper.delFavorite(param);
 		}
 		return 0;
+	}
+	
+	public List<UserDMI> selFavoriteList(UserPARAM param) {	
+		List<UserDMI> list  = mapper.selFavoriteList(param); //유창반점, 태산만두, 뉴욕피자 큰걸 가져오는 list
+		
+		for(UserDMI vo : list) {	//하나 당 각각 추천 메뉴를 가져오기위해 for each문 사용
+			RestPARAM param2 = new RestPARAM();
+			param2.setI_rest(vo.getI_rest());
+			
+			List<RestRecMenuVO> eachRecMenuList = restMapper.selRestRecMenus(param2);
+			vo.setMenuList(eachRecMenuList);
+		}
+		
+		return list;
 	}
 }
 
